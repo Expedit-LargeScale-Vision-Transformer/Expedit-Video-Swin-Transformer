@@ -1,256 +1,149 @@
-<div align="center">
-  <img src="/docs/imgs/mmaction2_logo.png" width="500"/>
-</div>
+# Video Swin Transformer
+
+By [Ze Liu](https://github.com/zeliu98/)\*, [Jia Ning](https://github.com/hust-nj)\*, [Yue Cao](http://yue-cao.me),  [Yixuan Wei](https://github.com/weiyx16), [Zheng Zhang](https://stupidzz.github.io/), [Stephen Lin](https://scholar.google.com/citations?user=c3PYmxUAAAAJ&hl=en) and [Han Hu](https://ancientmooner.github.io/).
+
+This repo is the official implementation of ["Video Swin Transformer"](arxiv_link). It is based on [mmaction2](https://github.com/open-mmlab/mmaction2).
+
+## Updates
+
+***06/25/2021*** Initial commits
 
 ## Introduction
 
-English | [简体中文](/README_zh-CN.md)
+**Video Swin Transformer** is initially described in ["Video Swin Transformer"](arxiv_link), which advocates an inductive bias of locality in video Transformers, leading to a better speed-accuracy trade-off compared to previous approaches which compute self-attention globally even with spatial-temporal factorization. The locality of the proposed video architecture is realized by adapting the Swin Transformer designed for the image domain, while continuing to leverage the power of pre-trained image models. Our approach achieves state-of-the-art accuracy on a broad range of video recognition benchmarks, including on action recognition (`84.9` top-1 accuracy on Kinetics-400 and `86.1` top-1 accuracy on Kinetics-600 with `~20x` less pre-training data and `~3x` smaller model size) and temporal modeling (`69.6` top-1 accuracy on Something-Something v2).
 
-[![Documentation](https://readthedocs.org/projects/mmaction2/badge/?version=latest)](https://mmaction2.readthedocs.io/en/latest/)
-[![actions](https://github.com/open-mmlab/mmaction2/workflows/build/badge.svg)](https://github.com/open-mmlab/mmaction2/actions)
-[![codecov](https://codecov.io/gh/open-mmlab/mmaction2/branch/master/graph/badge.svg)](https://codecov.io/gh/open-mmlab/mmaction2)
-[![PyPI](https://img.shields.io/pypi/v/mmaction2)](https://pypi.org/project/mmaction2/)
-[![LICENSE](https://img.shields.io/github/license/open-mmlab/mmaction2.svg)](https://github.com/open-mmlab/mmaction2/blob/master/LICENSE)
-[![Average time to resolve an issue](https://isitmaintained.com/badge/resolution/open-mmlab/mmaction2.svg)](https://github.com/open-mmlab/mmaction2/issues)
-[![Percentage of issues still open](https://isitmaintained.com/badge/open/open-mmlab/mmaction2.svg)](https://github.com/open-mmlab/mmaction2/issues)
 
-MMAction2 is an open-source toolbox for video understanding based on PyTorch.
-It is a part of the [OpenMMLab](http://openmmlab.org/) project.
+![teaser](figures/teaser.png)
 
-The master branch works with **PyTorch 1.3+**.
+## Results and Models
 
-<div align="center">
-  <img src="/docs/imgs/mmaction2_overview.gif" width="450px"/><br>
-    Action Recognition Results on Kinetics-400
-</div>
-<div align="center">
-  <img src="/docs/imgs/spatio-temporal-det.gif" width="800px"/><br>
-    Spatio-Temporal Action Detection Results on AVA-2.1
-</div>
+### Kinetics 400
 
-### Major Features
+| Backbone |  Pretrain   | Lr Schd | spatial crop | acc@1 | acc@5 | #params | FLOPs | config | model |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+|  Swin-T  | ImageNet-1K |  30ep   |     224      |  78.8  |  93.6  |   28M   |  87.9G  |  [config](configs/recognition/swin/swin_tiny_patch244_window877_kinetics400_1k.py)  | [github](https://github.com/SwinTransformer/storage/releases/download/v1.0.4/swin_tiny_patch244_window877_kinetics400_1k.pth)/[baidu](https://pan.baidu.com/s/1mIqRzk8RILeRsP2KB5T6fg) |
+|  Swin-S  | ImageNet-1K |  30ep   |     224      |  80.6  |  94.5  |   50M   |  165.9G  |  [config](configs/recognition/swin/swin_small_patch244_window877_kinetics400_1k.py)   | [github](https://github.com/SwinTransformer/storage/releases/download/v1.0.4/swin_small_patch244_window877_kinetics400_1k.pth)/[baidu](https://pan.baidu.com/s/1imq7LFNtSu3VkcRjd04D4Q) |
+|  Swin-B  | ImageNet-1K |  30ep   |     224      |  80.6  |  94.6  |   88M   |  281.6G  |  [config](configs/recognition/swin/swin_base_patch244_window877_kinetics400_1k.py)   | [github](https://github.com/SwinTransformer/storage/releases/download/v1.0.4/swin_base_patch244_window877_kinetics400_1k.pth)/[baidu](https://pan.baidu.com/s/1bD2lxGxqIV7xECr1n2slng) |
+|  Swin-B  | ImageNet-22K |  30ep   |     224      |  82.7  |  95.5  |   88M   |  281.6G  |  [config](configs/recognition/swin/swin_base_patch244_window877_kinetics400_22k.py)   | [github](https://github.com/SwinTransformer/storage/releases/download/v1.0.4/swin_base_patch244_window877_kinetics400_22k.pth)/[baidu](https://pan.baidu.com/s/1CcCNzJAIud4niNPcREbDbQ) |
 
-- **Modular design**
+### Kinetics 600
 
-  We decompose the video understanding framework into different components and one can easily construct a customized
-  video understanding framework by combining different modules.
+| Backbone |  Pretrain   | Lr Schd | spatial crop | acc@1 | acc@5 | #params | FLOPs | config | model |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+|  Swin-B  | ImageNet-22K |  30ep   |     224      |  84.0  |  96.5  |   88M   |  281.6G  |  [config](configs/recognition/swin/swin_base_patch244_window877_kinetics600_22k.py)   | [github](https://github.com/SwinTransformer/storage/releases/download/v1.0.4/swin_base_patch244_window877_kinetics600_22k.pth)/[baidu](https://pan.baidu.com/s/1ZMeW6ylELTje-o3MiaZ-MQ) |
 
-- **Support for various datasets**
+### Something-Something V2
 
-  The toolbox directly supports multiple datasets, UCF101, Kinetics-[400/600/700], Something-Something V1&V2, Moments in Time, Multi-Moments in Time, THUMOS14, etc.
+| Backbone |  Pretrain   | Lr Schd | spatial crop | acc@1 | acc@5 | #params | FLOPs | config | model |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+|  Swin-B  | Kinetics 400 |  60ep  |     224      |  69.6  |  92.7  |   89M   |  320.6G  |  [config](configs/recognition/swin/swin_base_patch244_window1677_sthv2.py)   | [github](https://github.com/SwinTransformer/storage/releases/download/v1.0.4/swin_base_patch244_window1677_sthv2.pth)/[baidu](https://pan.baidu.com/s/18MOGf6L3LeUjrLoQEeA52Q) |
 
-- **Support for multiple video understanding frameworks**
+**Notes**:
 
-  MMAction2 implements popular frameworks for video understanding:
+- **Pre-trained image models can be downloaded from [Swin Transformer for ImageNet Classification](https://github.com/microsoft/Swin-Transformer)**.
+- The pre-trained model of SSv2 could be downloaded at [github](https://github.com/SwinTransformer/storage/releases/download/v1.0.4/swin_base_patch244_window1677_kinetics400_22k.pth)/[baidu](https://pan.baidu.com/s/1ZnJuX7-x2BflDKHpuvdLUg).
+- Access code for baidu is `swin`.
 
-  - For action recognition, various algorithms are implemented, including TSN, TSM, TIN, R(2+1)D, I3D, SlowOnly, SlowFast, CSN, Non-local, etc.
+## Usage
 
-  - For temporal action localization, we implement BSN, BMN, SSN.
-
-  - For spatial temporal detection, we implement SlowOnly, SlowFast.
-
-- **Well tested and documented**
-
-  We provide detailed documentation and API reference, as well as unittests.
-
-## Changelog
-
-v0.15.0 was released in 31/05/2021. Please refer to [changelog.md](docs/changelog.md) for details and release history.
-
-## Benchmark
-
-| Model  |input| io backend | batch size x gpus | MMAction2 (s/iter) | MMAction (s/iter) | Temporal-Shift-Module (s/iter) | PySlowFast (s/iter) |
-| :--- | :---------------:|:---------------:| :---------------:| :---------------:  | :--------------------: | :----------------------------: | :-----------------: |
-| [TSN](/configs/recognition/tsn/tsn_r50_1x1x3_100e_kinetics400_rgb.py)| 256p rawframes |Memcached| 32x8|**[0.32](https://download.openmmlab.com/mmaction/benchmark/recognition/mmaction2/tsn_256p_rawframes_memcahed_32x8.zip)** | [0.38](https://download.openmmlab.com/mmaction/benchmark/recognition/mmaction/tsn_256p_rawframes_memcached_32x8.zip)| [0.42](https://download.openmmlab.com/mmaction/benchmark/recognition/temporal_shift_module/tsn_256p_rawframes_memcached_32x8.zip)| x |
-| [TSN](/configs/recognition/tsn/tsn_r50_1x1x3_100e_kinetics400_rgb.py)| 256p dense-encoded video |Disk| 32x8|**[0.61](https://download.openmmlab.com/mmaction/benchmark/recognition/mmaction2/tsn_256p_fast_videos_disk_32x8.zip)**| x | x | TODO |
-|[I3D heavy](/configs/recognition/i3d/i3d_r50_video_heavy_8x8x1_100e_kinetics400_rgb.py)|256p videos|Disk |8x8| **[0.34](https://download.openmmlab.com/mmaction/benchmark/recognition/mmaction2/i3d_heavy_256p_videos_disk_8x8.zip)** | x | x | [0.44](https://download.openmmlab.com/mmaction/benchmark/recognition/pyslowfast/pysf_i3d_r50_8x8_video.log) |
-| [I3D](/configs/recognition/i3d/i3d_r50_32x2x1_100e_kinetics400_rgb.py)|256p rawframes|Memcached|8x8| **[0.43](https://download.openmmlab.com/mmaction/benchmark/recognition/mmaction2/i3d_256p_rawframes_memcahed_8x8.zip)** | [0.56](https://download.openmmlab.com/mmaction/benchmark/recognition/mmaction/i3d_256p_rawframes_memcached_8x8.zip) | x | x |
-| [TSM](/configs/recognition/tsm/tsm_r50_1x1x8_50e_kinetics400_rgb.py) |256p rawframes|Memcached| 8x8|**[0.31](https://download.openmmlab.com/mmaction/benchmark/recognition/mmaction2/tsm_256p_rawframes_memcahed_8x8.zip)** | x | [0.41](https://download.openmmlab.com/mmaction/benchmark/recognition/temporal_shift_module/tsm_256p_rawframes_memcached_8x8.zip) | x |
-| [Slowonly](/configs/recognition/slowonly/slowonly_r50_video_4x16x1_256e_kinetics400_rgb.py)|256p videos|Disk|8x8 | **[0.32](https://download.openmmlab.com/mmaction/benchmark/recognition/mmaction2/slowonly_256p_videos_disk_8x8.zip)** | TODO | x | [0.34](https://download.openmmlab.com/mmaction/benchmark/recognition/pyslowfast/pysf_slowonly_r50_4x16_video.log) |
-| [Slowfast](/configs/recognition/slowfast/slowfast_r50_video_4x16x1_256e_kinetics400_rgb.py)|256p videos|Disk|8x8 | **[0.69](https://download.openmmlab.com/mmaction/benchmark/recognition/mmaction2/slowfast_256p_videos_disk_8x8.zip)** | x | x | [1.04](https://download.openmmlab.com/mmaction/benchmark/recognition/pyslowfast/pysf_slowfast_r50_4x16_video.log) |
-| [R(2+1)D](/configs/recognition/r2plus1d/r2plus1d_r34_video_8x8x1_180e_kinetics400_rgb.py)|256p videos |Disk| 8x8|**[0.45](https://download.openmmlab.com/mmaction/benchmark/recognition/mmaction2/r2plus1d_256p_videos_disk_8x8.zip)** | x | x | x |
-
-Details can be found in [benchmark](docs/benchmark.md).
-
-## ModelZoo
-
-Supported methods for Action Recognition:
-
-<details open>
-<summary>(click to collapse)</summary>
-
-- ✅ [TSN](configs/recognition/tsn/README.md) (ECCV'2016)
-- ✅ [TSM](configs/recognition/tsm/README.md) (ICCV'2019)
-- ✅ [TSM Non-Local](configs/recognition/tsm/README.md) (ICCV'2019)
-- ✅ [R(2+1)D](configs/recognition/r2plus1d/README.md) (CVPR'2018)
-- ✅ [I3D](configs/recognition/i3d/README.md) (CVPR'2017)
-- ✅ [I3D Non-Local](configs/recognition/i3d/README.md) (CVPR'2018)
-- ✅ [SlowOnly](configs/recognition/slowonly/README.md) (ICCV'2019)
-- ✅ [SlowFast](configs/recognition/slowfast/README.md) (ICCV'2019)
-- ✅ [CSN](configs/recognition/csn/README.md) (ICCV'2019)
-- ✅ [TIN](configs/recognition/tin/README.md) (AAAI'2020)
-- ✅ [TPN](configs/recognition/tpn/README.md) (CVPR'2020)
-- ✅ [C3D](configs/recognition/c3d/README.md) (CVPR'2014)
-- ✅ [X3D](configs/recognition/x3d/README.md) (CVPR'2020)
-- ✅ [OmniSource](configs/recognition/omnisource/README.md) (ECCV'2020)
-- ✅ [MultiModality: Audio](configs/recognition_audio/resnet/README.md) (ArXiv'2020)
-- ✅ [TANet](configs/recognition/tanet/README.md) (ArXiv'2020)
-- ✅ [TRN](configs/recognition/trn/README.md) (CVPR'2015)
-- ✅ [PoseC3D](configs/skeleton/posec3d/README.md) (ArXiv'2021)
-
-</details>
-
-Supported methods for Temporal Action Detection:
-
-<details open>
-<summary>(click to collapse)</summary>
-
-- ✅ [BSN](configs/localization/bsn/README.md) (ECCV'2018)
-- ✅ [BMN](configs/localization/bmn/README.md) (ICCV'2019)
-- ✅ [SSN](configs/localization/ssn/README.md) (ICCV'2017)
-
-</details>
-
-Supported methods for Spatial Temporal Action Detection:
-
-<details open>
-<summary>(click to collapse)</summary>
-
-- ✅ [ACRN](configs/detection/acrn/README.md) (ECCV'2018)
-- ✅ [SlowOnly+Fast R-CNN](configs/detection/ava/README.md) (ICCV'2019)
-- ✅ [SlowFast+Fast R-CNN](configs/detection/ava/README.md) (ICCV'2019)
-- ✅ [Long-Term Feature Bank](configs/detection/lfb/README.md) (CVPR'2019)
-
-</details>
-
-Results and models are available in the *README.md* of each method's config directory.
-A summary can be found in the [**model zoo**](https://mmaction2.readthedocs.io/en/latest/recognition_models.html) page.
-
-We will keep up with the latest progress of the community, and support more popular algorithms and frameworks.
-If you have any feature requests, please feel free to leave a comment in [Issues](https://github.com/open-mmlab/mmaction2/issues/19).
-
-## Dataset
-
-Supported [datasets](https://mmaction2.readthedocs.io/en/latest/supported_datasets.html):
-
-Supported datasets for Action Recognition:
-
-<details open>
-<summary>(click to collapse)</summary>
-
-- ✅ [UCF101](/tools/data/ucf101/README.md) \[ [Homepage](https://www.crcv.ucf.edu/research/data-sets/ucf101/) \] (CRCV-IR-12-01)
-- ✅ [HMDB51](/tools/data/hmdb51/README.md) \[ [Homepage](https://serre-lab.clps.brown.edu/resource/hmdb-a-large-human-motion-database/) \] (ICCV'2011)
-- ✅ [Kinetics-[400/600/700]](/tools/data/kinetics/README.md) \[ [Homepage](https://deepmind.com/research/open-source/kinetics) \] (CVPR'2017)
-- ✅ [Something-Something V1](/tools/data/sthv1/README.md) \[ [Homepage](https://20bn.com/datasets/something-something/v1) \] (ICCV'2017)
-- ✅ [Something-Something V2](/tools/data/sthv2/README.md) \[ [Homepage](https://20bn.com/datasets/something-something) \] (ICCV'2017)
-- ✅ [Moments in Time](/tools/data/mit/README.md) \[ [Homepage](http://moments.csail.mit.edu/) \] (TPAMI'2019)
-- ✅ [Multi-Moments in Time](/tools/data/mmit/README.md) \[ [Homepage](http://moments.csail.mit.edu/challenge_iccv_2019.html) \] (ArXiv'2019)
-- ✅ [HVU](/tools/data/hvu/README.md) \[ [Homepage](https://github.com/holistic-video-understanding/HVU-Dataset) \] (ECCV'2020)
-- ✅ [Jester](/tools/data/jester/README.md) \[ [Homepage](https://20bn.com/datasets/jester/v1) \] (ICCV'2019)
-- ✅ [GYM](/tools/data/gym/README.md) \[ [Homepage](https://sdolivia.github.io/FineGym/) \] (CVPR'2020)
-- ✅ [ActivityNet](/tools/data/activitynet/README.md) \[ [Homepage](http://activity-net.org/) \] (CVPR'2015)
-- ✅ [Diving48](/tools/data/diving48/README.md) \[ [Homepage](http://www.svcl.ucsd.edu/projects/resound/dataset.html) \] (ECCV'2018)
-- ✅ [OmniSource](/tools/data/omnisource/README.md) \[ [Homepage](https://kennymckormick.github.io/omnisource/) \] (ECCV'2020)
-
-</details>
-
-Supported datasets for Temporal Action Detection
-
-<details open>
-<summary>(click to collapse)</summary>
-
-- ✅ [ActivityNet](/tools/data/activitynet/README.md) \[ [Homepage](http://activity-net.org/) \] (CVPR'2015)
-- ✅ [THUMOS14](/tools/data/thumos14/README.md) \[ [Homepage](https://www.crcv.ucf.edu/THUMOS14/download.html) \] (THUMOS Challenge 2014)
-
-</details>
-
-Supported datasets for Spatial Temporal Action Detection
-
-<details open>
-<summary>(click to collapse)</summary>
-
-- ✅ [AVA](/tools/data/ava/README.md) \[ [Homepage](https://research.google.com/ava/index.html) \] (CVPR'2018)
-- 🔲 [UCF101-24](/tools/data/ucf101_24/README.md) \[ [Homepage](http://www.thumos.info/download.html) \] (CRCV-IR-12-01)
-- 🔲 [JHMDB](/tools/data/jhmdb/README.md) \[ [Homepage](http://jhmdb.is.tue.mpg.de/) \] (ICCV'2013)
-
-</details>
-
-Supported datasets for Skeleton-based Action Detection
-
-<details open>
-<summary>(click to collapse)</summary>
-
-- ✅ [PoseC3D-FineGYM](/tools/data/skeleton/README.md) \[ [Homepage](https://kennymckormick.github.io/posec3d/) \] (arXiv'2021)
-
-</details>
-
-Datasets marked with 🔲 are not fully supported yet, but related dataset preparation steps are provided.
-
-## Installation
+###  Installation
 
 Please refer to [install.md](docs/install.md) for installation.
 
-## Data Preparation
+We also provide docker file [cuda10.1](docker/docker_10.1) ([image url](https://hub.docker.com/layers/ninja0/mmdet/pytorch1.7.1-py37-cuda10.1-openmpi-mmcv1.3.3-apex-timm/images/sha256-06d745934cb255e7fdf4fa55c47b192c81107414dfb3d0bc87481ace50faf90b?context=repo)) and [cuda11.0](docker/docker_11.0) ([image url](https://hub.docker.com/layers/ninja0/mmdet/pytorch1.7.1-py37-cuda11.0-openmpi-mmcv1.3.3-apex-timm/images/sha256-79ec3ec5796ca154a66d85c50af5fa870fcbc48357c35ee8b612519512f92828?context=repo)) for convenient usage.
+
+###  Data Preparation
 
 Please refer to [data_preparation.md](docs/data_preparation.md) for a general knowledge of data preparation.
-The supported datasets are listed in [supported_datasets.md](docs/supported_datasets.md)
+The supported datasets are listed in [supported_datasets.md](docs/supported_datasets.md).
 
-## Get Started
 
-Please see [getting_started.md](docs/getting_started.md) for the basic usage of MMAction2.
-There are also tutorials:
+### Inference
+```
+# single-gpu testing
+python tools/test.py <CONFIG_FILE> <CHECKPOINT_FILE> --eval top_k_accuracy
 
-- [learn about configs](docs/tutorials/1_config.md)
-- [finetuning models](docs/tutorials/2_finetune.md)
-- [adding new dataset](docs/tutorials/3_new_dataset.md)
-- [designing data pipeline](docs/tutorials/4_data_pipeline.md)
-- [adding new modules](docs/tutorials/5_new_modules.md)
-- [exporting model to onnx](docs/tutorials/6_export_model.md)
-- [customizing runtime settings](docs/tutorials/7_customize_runtime.md)
+# multi-gpu testing
+bash tools/dist_test.sh <CONFIG_FILE> <CHECKPOINT_FILE> <GPU_NUM> --eval top_k_accuracy
+```
 
-A Colab tutorial is also provided. You may preview the notebook [here](demo/mmaction2_tutorial.ipynb) or directly [run](https://colab.research.google.com/github/open-mmlab/mmaction2/blob/master/demo/mmaction2_tutorial.ipynb) on Colab.
+### Training
 
-## FAQ
+To train a video recognition model with pre-trained image models (for Kinetics-400 and Kineticc-600 datasets), run:
+```
+# single-gpu training
+python tools/train.py <CONFIG_FILE> --cfg-options model.backbone.pretrained=<PRETRAIN_MODEL> [model.backbone.use_checkpoint=True] [other optional arguments]
 
-Please refer to [FAQ](docs/faq.md) for frequently asked questions.
+# multi-gpu training
+bash tools/dist_train.sh <CONFIG_FILE> <GPU_NUM> --cfg-options model.backbone.pretrained=<PRETRAIN_MODEL> [model.backbone.use_checkpoint=True] [other optional arguments]
+```
+For example, to train a `Swin-T` model for Kinetics-400 dataset  with  8 gpus, run:
+```
+bash tools/dist_train.sh configs/recognition/swin/swin_tiny_patch244_window877_kinetics400_1k.py 8 --cfg-options model.backbone.pretrained=<PRETRAIN_MODEL> 
+```
 
-## License
+To train a video recognizer with pre-trained video models (for Something-Something v2 datasets), run:
+```
+# single-gpu training
+python tools/train.py <CONFIG_FILE> --cfg-options load_from=<PRETRAIN_MODEL> [model.backbone.use_checkpoint=True] [other optional arguments]
 
-This project is released under the [Apache 2.0 license](LICENSE).
+# multi-gpu training
+bash tools/dist_train.sh <CONFIG_FILE> <GPU_NUM> --cfg-options load_from=<PRETRAIN_MODEL> [model.backbone.use_checkpoint=True] [other optional arguments]
+```
+For example, to train a `Swin-B` model for SSv2 dataset with 8 gpus, run:
+```
+bash tools/dist_train.sh configs/recognition/swin/swin_base_patch244_window1677_sthv2.py 8 --cfg-options load_from=<PRETRAIN_MODEL>
+```
+
+**Note:** `use_checkpoint` is used to save GPU memory. Please refer to [this page](https://pytorch.org/docs/stable/checkpoint.html) for more details.
+
+
+### Apex (optional):
+We use apex for mixed precision training by default. To install apex, use our provided docker or run:
+```
+git clone https://github.com/NVIDIA/apex
+cd apex
+pip install -v --disable-pip-version-check --no-cache-dir --global-option="--cpp_ext" --global-option="--cuda_ext" ./
+```
+If you would like to disable apex, comment out the following code block in the [configuration files](configs/recognition/swin):
+```
+# do not use mmcv version fp16
+fp16 = None
+optimizer_config = dict(
+    type="DistOptimizerHook",
+    update_interval=1,
+    grad_clip=None,
+    coalesce=True,
+    bucket_size_mb=-1,
+    use_fp16=True,
+)
+```
 
 ## Citation
+If you find our work useful in your research, please cite:
 
-If you find this project useful in your research, please consider cite:
+```
+@article{liu2021xxxx,
+  title={Video Swin Transformer},
+  author={Liu, Ze and Ning, Jia and Cao, Yue and Wei, Yixuan and Zhang, Zheng and Lin, Stephen and Hu, Han},
+  journal={arXiv preprint arXiv:2106.xxxxx},
+  year={2021}
+}
 
-```BibTeX
-@misc{2020mmaction2,
-    title={OpenMMLab's Next Generation Video Understanding Toolbox and Benchmark},
-    author={MMAction2 Contributors},
-    howpublished = {\url{https://github.com/open-mmlab/mmaction2}},
-    year={2020}
+@article{liu2021Swin,
+  title={Swin Transformer: Hierarchical Vision Transformer using Shifted Windows},
+  author={Liu, Ze and Lin, Yutong and Cao, Yue and Hu, Han and Wei, Yixuan and Zhang, Zheng and Lin, Stephen and Guo, Baining},
+  journal={arXiv preprint arXiv:2103.14030},
+  year={2021}
 }
 ```
 
-## Contributing
+## Other Links
 
-We appreciate all contributions to improve MMAction2. Please refer to [CONTRIBUTING.md](https://github.com/open-mmlab/mmcv/blob/master/CONTRIBUTING.md) in MMCV for more details about the contributing guideline.
+> **Image Classification**: See [Swin Transformer for Image Classification](https://github.com/microsoft/Swin-Transformer).
 
-## Acknowledgement
+> **Object Detection**: See [Swin Transformer for Object Detection](https://github.com/SwinTransformer/Swin-Transformer-Object-Detection).
 
-MMAction2 is an open source project that is contributed by researchers and engineers from various colleges and companies.
-We appreciate all the contributors who implement their methods or add new features, as well as users who give valuable feedbacks.
-We wish that the toolbox and benchmark could serve the growing research community by providing a flexible toolkit to reimplement existing methods and develop their own new models.
+> **Semantic Segmentation**: See [Swin Transformer for Semantic Segmentation](https://github.com/SwinTransformer/Swin-Transformer-Semantic-Segmentation).
 
-## Projects in OpenMMLab
-
-- [MMCV](https://github.com/open-mmlab/mmcv): OpenMMLab foundational library for computer vision.
-- [MMClassification](https://github.com/open-mmlab/mmclassification): OpenMMLab image classification toolbox and benchmark.
-- [MMDetection](https://github.com/open-mmlab/mmdetection): OpenMMLab detection toolbox and benchmark.
-- [MMDetection3D](https://github.com/open-mmlab/mmdetection3d): OpenMMLab's next-generation platform for general 3D object detection.
-- [MMSegmentation](https://github.com/open-mmlab/mmsegmentation): OpenMMLab semantic segmentation toolbox and benchmark.
-- [MMAction2](https://github.com/open-mmlab/mmaction2): OpenMMLab's next-generation video understanding toolbox and benchmark.
-- [MMTracking](https://github.com/open-mmlab/mmtracking): OpenMMLab video perception toolbox and benchmark.
-- [MMPose](https://github.com/open-mmlab/mmpose): OpenMMLab pose estimation toolbox and benchmark.
-- [MMEditing](https://github.com/open-mmlab/mmediting): OpenMMLab image and video editing toolbox.
-- [MMOCR](https://github.com/open-mmlab/mmocr): A Comprehensive Toolbox for Text Detection, Recognition and Understanding.
-- [MMGeneration](https://github.com/open-mmlab/mmgeneration): OpenMMLab image and video generative models toolbox.
+> **Self-Supervised Learning**: See [MoBY with Swin Transformer](https://github.com/SwinTransformer/Transformer-SSL).

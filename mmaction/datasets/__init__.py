@@ -5,7 +5,7 @@ from .audio_visual_dataset import AudioVisualDataset
 from .ava_dataset import AVADataset
 from .base import BaseDataset
 from .blending_utils import (BaseMiniBatchBlending, CutmixBlending,
-                             MixupBlending)
+                             MixupBlending, LabelSmoothing)
 from .builder import (BLENDINGS, DATASETS, PIPELINES, build_dataloader,
                       build_dataset)
 from .dataset_wrappers import RepeatDataset
@@ -22,6 +22,6 @@ __all__ = [
     'RawframeDataset', 'BaseDataset', 'ActivityNetDataset', 'SSNDataset',
     'HVUDataset', 'AudioDataset', 'AudioFeatureDataset', 'ImageDataset',
     'RawVideoDataset', 'AVADataset', 'AudioVisualDataset',
-    'BaseMiniBatchBlending', 'CutmixBlending', 'MixupBlending', 'DATASETS',
+    'BaseMiniBatchBlending', 'CutmixBlending', 'MixupBlending', 'LabelSmoothing', 'DATASETS',
     'PIPELINES', 'BLENDINGS', 'PoseDataset'
 ]
