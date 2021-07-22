@@ -61,6 +61,7 @@ We also provide docker file [cuda10.1](docker/docker_10.1) ([image url](https://
 Please refer to [data_preparation.md](docs/data_preparation.md) for a general knowledge of data preparation.
 The supported datasets are listed in [supported_datasets.md](docs/supported_datasets.md).
 
+We also share our Kinetics-400 annotation file [k400_val](https://github.com/SwinTransformer/storage/releases/download/v1.0.6/k400_val.txt), [k400_train](https://github.com/SwinTransformer/storage/releases/download/v1.0.6/k400_train.txt) for better comparison.
 
 ### Inference
 ```
