@@ -109,7 +109,7 @@ total_epochs = 60
 
 # runtime settings
 checkpoint_config = dict(interval=1)
-work_dir = work_dir = './work_dirs/sthv2_swin_base_patch244_window1677.py'
+work_dir = './work_dirs/sthv2_swin_base_patch244_window1677.py'
 find_unused_parameters = False
 
 
