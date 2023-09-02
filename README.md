@@ -21,7 +21,7 @@ This is the official implementation of the paper "[Expediting Large-Scale Vision
 
 | Method        | $\alpha$ | t $\times$ h $\times$ w   | GFLOPs | FPS  | Acc@1 | Acc@5 | config                                                       |
 | ------------- | -------- | ------------------------- | ------ | ---- | ----- | ----- | ------------------------------------------------------------ |
-| Swin-L        | -        | 8 $\times$ 12 $\times$ 12 | 2107   | 1.10 | 86.1  | 97.3  | [config](Expedit-Video-Swin-Transformer/configs/recognition/swin/swin_large_384_patch244_window81212_kinetics600_22k.py) |
+| Swin-L        | -        | 8 $\times$ 12 $\times$ 12 | 2107   | 1.10 | 86.1  | 97.3  | [config](configs/recognition/swin/swin_large_384_patch244_window81212_kinetics600_22k.py) |
 | Swin-L + Ours | 10       | 8 $\times$ 6 $\times$ 6   | 1824   | 1.53 | 85.6  | 97.1  | [config](configs/recognition/swin/hourglass_swin_large_384_patch244_window81212_kinetics600_22k.py) |
 
 
