@@ -9,14 +9,14 @@ model=dict(
         drop_path_rate=0.5,
         clustering_location=12,
         token_clustering_cfg=dict(
-            clustering_shape=(8, 8, 8),
+            clustering_shape=(8, 6, 6),
             n_iters=5,
-            temperature=0.01,
+            temperature=0.02,
             window_size=5,
         ),
         token_reconstruction_cfg=dict(
             k=25,
-            temperature=0.01,
+            temperature=0.02,
         ),
     ), 
     test_cfg=dict(max_testing_views=1))

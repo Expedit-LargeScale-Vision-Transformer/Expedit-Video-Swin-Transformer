@@ -1,52 +1,30 @@
-# Video Swin Transformer
+# Expediting Large-Scale Vision Transformer for Dense Prediction without Fine-tuning
 
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/video-swin-transformer/action-classification-on-kinetics-400)](https://paperswithcode.com/sota/action-classification-on-kinetics-400?p=video-swin-transformer)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/video-swin-transformer/action-classification-on-kinetics-600)](https://paperswithcode.com/sota/action-classification-on-kinetics-600?p=video-swin-transformer)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/video-swin-transformer/action-recognition-in-videos-on-something)](https://paperswithcode.com/sota/action-recognition-in-videos-on-something?p=video-swin-transformer)
-
-By [Ze Liu](https://github.com/zeliu98/)\*, [Jia Ning](https://github.com/hust-nj)\*, [Yue Cao](http://yue-cao.me),  [Yixuan Wei](https://github.com/weiyx16), [Zheng Zhang](https://stupidzz.github.io/), [Stephen Lin](https://scholar.google.com/citations?user=c3PYmxUAAAAJ&hl=en) and [Han Hu](https://ancientmooner.github.io/).
-
-This repo is the official implementation of ["Video Swin Transformer"](https://arxiv.org/abs/2106.13230). It is based on [mmaction2](https://github.com/open-mmlab/mmaction2).
-
-## Updates
-
-***06/25/2021*** Initial commits
 
 ## Introduction
 
-**Video Swin Transformer** is initially described in ["Video Swin Transformer"](https://arxiv.org/abs/2106.13230), which advocates an inductive bias of locality in video Transformers, leading to a better speed-accuracy trade-off compared to previous approaches which compute self-attention globally even with spatial-temporal factorization. The locality of the proposed video architecture is realized by adapting the Swin Transformer designed for the image domain, while continuing to leverage the power of pre-trained image models. Our approach achieves state-of-the-art accuracy on a broad range of video recognition benchmarks, including action recognition (`84.9` top-1 accuracy on Kinetics-400 and `86.1` top-1 accuracy on Kinetics-600 with `~20x` less pre-training data and `~3x` smaller model size) and temporal modeling (`69.6` top-1 accuracy on Something-Something v2).
+This is the official implementation of the paper "[Expediting Large-Scale Vision Transformer for Dense Prediction without Fine-tuning](https://arxiv.org/abs/2210.01035)" on [Video Swin Transformer](https://arxiv.org/abs/2106.13230).
 
+![framework](figures/Hourglass_swin_framework.png)
+![framework](figures/TokenClusterReconstruct_Details.png)
 
-![teaser](figures/teaser.png)
-
-## Results and Models
+## Results 
 
 ### Kinetics 400
 
-| Backbone |  Pretrain   | Lr Schd | spatial crop | acc@1 | acc@5 | #params | FLOPs | config | model |
-| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-|  Swin-T  | ImageNet-1K |  30ep   |     224      |  78.8  |  93.6  |   28M   |  87.9G  |  [config](configs/recognition/swin/swin_tiny_patch244_window877_kinetics400_1k.py)  | [github](https://github.com/SwinTransformer/storage/releases/download/v1.0.4/swin_tiny_patch244_window877_kinetics400_1k.pth)/[baidu](https://pan.baidu.com/s/1mIqRzk8RILeRsP2KB5T6fg) |
-|  Swin-S  | ImageNet-1K |  30ep   |     224      |  80.6  |  94.5  |   50M   |  165.9G  |  [config](configs/recognition/swin/swin_small_patch244_window877_kinetics400_1k.py)   | [github](https://github.com/SwinTransformer/storage/releases/download/v1.0.4/swin_small_patch244_window877_kinetics400_1k.pth)/[baidu](https://pan.baidu.com/s/1imq7LFNtSu3VkcRjd04D4Q) |
-|  Swin-B  | ImageNet-1K |  30ep   |     224      |  80.6  |  94.6  |   88M   |  281.6G  |  [config](configs/recognition/swin/swin_base_patch244_window877_kinetics400_1k.py)   | [github](https://github.com/SwinTransformer/storage/releases/download/v1.0.4/swin_base_patch244_window877_kinetics400_1k.pth)/[baidu](https://pan.baidu.com/s/1bD2lxGxqIV7xECr1n2slng) |
-|  Swin-B  | ImageNet-22K |  30ep   |     224      |  82.7  |  95.5  |   88M   |  281.6G  |  [config](configs/recognition/swin/swin_base_patch244_window877_kinetics400_22k.py)   | [github](https://github.com/SwinTransformer/storage/releases/download/v1.0.4/swin_base_patch244_window877_kinetics400_22k.pth)/[baidu](https://pan.baidu.com/s/1CcCNzJAIud4niNPcREbDbQ) |
+| Method        | $\alpha$ | t $\times$ h $\times$ w   | GFLOPs | FPS  | Acc@1 | Acc@5 | config                                                       |
+| ------------- | -------- | ------------------------- | ------ | ---- | ----- | ----- | ------------------------------------------------------------ |
+| Swin-L        | -        | 8 $\times$ 12 $\times$ 12 | 2107   | 1.10 | 84.7  | 96.6  | [config](configs/recognition/swin/swin_large_384_patch244_window81212_kinetics400_22k.py) |
+| Swin-L + Ours | 10       | 8 $\times$ 6 $\times$ 6   | 1662   | 1.66 | 84.0  | 96.3  | [config](configs/recognition/swin/hourglass_swin_large_384_patch244_window81212_kinetics400_22k.py) |
 
 ### Kinetics 600
 
-| Backbone |  Pretrain   | Lr Schd | spatial crop | acc@1 | acc@5 | #params | FLOPs | config | model |
-| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-|  Swin-B  | ImageNet-22K |  30ep   |     224      |  84.0  |  96.5  |   88M   |  281.6G  |  [config](configs/recognition/swin/swin_base_patch244_window877_kinetics600_22k.py)   | [github](https://github.com/SwinTransformer/storage/releases/download/v1.0.4/swin_base_patch244_window877_kinetics600_22k.pth)/[baidu](https://pan.baidu.com/s/1ZMeW6ylELTje-o3MiaZ-MQ) |
+| Method        | $\alpha$ | t $\times$ h $\times$ w   | GFLOPs | FPS  | Acc@1 | Acc@5 | config                                                       |
+| ------------- | -------- | ------------------------- | ------ | ---- | ----- | ----- | ------------------------------------------------------------ |
+| Swin-L        | -        | 8 $\times$ 12 $\times$ 12 | 2107   | 1.10 | 86.1  | 97.3  | [config](Expedit-Video-Swin-Transformer/configs/recognition/swin/swin_large_384_patch244_window81212_kinetics600_22k.py) |
+| Swin-L + Ours | 10       | 8 $\times$ 6 $\times$ 6   | 1824   | 1.53 | 85.6  | 97.1  | [config](configs/recognition/swin/hourglass_swin_large_384_patch244_window81212_kinetics600_22k.py) |
 
-### Something-Something V2
 
-| Backbone |  Pretrain   | Lr Schd | spatial crop | acc@1 | acc@5 | #params | FLOPs | config | model |
-| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-|  Swin-B  | Kinetics 400 |  60ep  |     224      |  69.6  |  92.7  |   89M   |  320.6G  |  [config](configs/recognition/swin/swin_base_patch244_window1677_sthv2.py)   | [github](https://github.com/SwinTransformer/storage/releases/download/v1.0.4/swin_base_patch244_window1677_sthv2.pth)/[baidu](https://pan.baidu.com/s/18MOGf6L3LeUjrLoQEeA52Q) |
-
-**Notes**:
-
-- **Pre-trained image models can be downloaded from [Swin Transformer for ImageNet Classification](https://github.com/microsoft/Swin-Transformer)**.
-- The pre-trained model of SSv2 could be downloaded at [github](https://github.com/SwinTransformer/storage/releases/download/v1.0.4/swin_base_patch244_window1677_kinetics400_22k.pth)/[baidu](https://pan.baidu.com/s/1ZnJuX7-x2BflDKHpuvdLUg).
-- Access code for baidu is `swin`.
 
 ## Usage
 
@@ -72,60 +50,17 @@ python tools/test.py <CONFIG_FILE> <CHECKPOINT_FILE> --eval top_k_accuracy
 bash tools/dist_test.sh <CONFIG_FILE> <CHECKPOINT_FILE> <GPU_NUM> --eval top_k_accuracy
 ```
 
-### Training
-
-To train a video recognition model with pre-trained image models (for Kinetics-400 and Kineticc-600 datasets), run:
-```
-# single-gpu training
-python tools/train.py <CONFIG_FILE> --cfg-options model.backbone.pretrained=<PRETRAIN_MODEL> [model.backbone.use_checkpoint=True] [other optional arguments]
-
-# multi-gpu training
-bash tools/dist_train.sh <CONFIG_FILE> <GPU_NUM> --cfg-options model.backbone.pretrained=<PRETRAIN_MODEL> [model.backbone.use_checkpoint=True] [other optional arguments]
-```
-For example, to train a `Swin-T` model for Kinetics-400 dataset  with  8 gpus, run:
-```
-bash tools/dist_train.sh configs/recognition/swin/swin_tiny_patch244_window877_kinetics400_1k.py 8 --cfg-options model.backbone.pretrained=<PRETRAIN_MODEL> 
-```
-
-To train a video recognizer with pre-trained video models (for Something-Something v2 datasets), run:
-```
-# single-gpu training
-python tools/train.py <CONFIG_FILE> --cfg-options load_from=<PRETRAIN_MODEL> [model.backbone.use_checkpoint=True] [other optional arguments]
-
-# multi-gpu training
-bash tools/dist_train.sh <CONFIG_FILE> <GPU_NUM> --cfg-options load_from=<PRETRAIN_MODEL> [model.backbone.use_checkpoint=True] [other optional arguments]
-```
-For example, to train a `Swin-B` model for SSv2 dataset with 8 gpus, run:
-```
-bash tools/dist_train.sh configs/recognition/swin/swin_base_patch244_window1677_sthv2.py 8 --cfg-options load_from=<PRETRAIN_MODEL>
-```
-
-**Note:** `use_checkpoint` is used to save GPU memory. Please refer to [this page](https://pytorch.org/docs/stable/checkpoint.html) for more details.
-
-
-### Apex (optional):
-We use apex for mixed precision training by default. To install apex, use our provided docker or run:
-```
-git clone https://github.com/NVIDIA/apex
-cd apex
-pip install -v --disable-pip-version-check --no-cache-dir --global-option="--cpp_ext" --global-option="--cuda_ext" ./
-```
-If you would like to disable apex, comment out the following code block in the [configuration files](configs/recognition/swin):
-```
-# do not use mmcv version fp16
-fp16 = None
-optimizer_config = dict(
-    type="DistOptimizerHook",
-    update_interval=1,
-    grad_clip=None,
-    coalesce=True,
-    bucket_size_mb=-1,
-    use_fp16=True,
-)
-```
-
 ## Citation
-If you find our work useful in your research, please cite:
+If you find this project useful in your research, please consider cite:
+
+```BibTex
+@article{liang2022expediting,
+	author    = {Liang, Weicong and Yuan, Yuhui and Ding, Henghui and Luo, Xiao and Lin, Weihong and Jia, Ding and Zhang, Zheng and Zhang, Chao and Hu, Han},
+	title     = {Expediting large-scale vision transformer for dense prediction without fine-tuning},
+	journal   = {arXiv preprint arXiv:2210.01035},
+	year      = {2022},
+}
+```
 
 ```
 @article{liu2021video,
@@ -142,13 +77,3 @@ If you find our work useful in your research, please cite:
   year={2021}
 }
 ```
-
-## Other Links
-
-> **Image Classification**: See [Swin Transformer for Image Classification](https://github.com/microsoft/Swin-Transformer).
-
-> **Object Detection**: See [Swin Transformer for Object Detection](https://github.com/SwinTransformer/Swin-Transformer-Object-Detection).
-
-> **Semantic Segmentation**: See [Swin Transformer for Semantic Segmentation](https://github.com/SwinTransformer/Swin-Transformer-Semantic-Segmentation).
-
-> **Self-Supervised Learning**: See [MoBY with Swin Transformer](https://github.com/SwinTransformer/Transformer-SSL).
